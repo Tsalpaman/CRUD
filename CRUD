@@ -1,0 +1,514 @@
+def print_pupil(pupil):
+    fl2 = False
+    for i in range(len(students)):
+        if students[i][0] == pupil:
+            for j in range(1, len(students[i])):
+                print(students[0][j], end="")
+                print(students[i][j])
+                fl2 = True
+    if not fl2:  # checks if there is a person with the user's input id
+        print(f"There is no registration with id: {pupil}")
+
+
+def create_pupil():
+    z = next_id()
+    print("Next ID: ", z)
+    flag = "1"
+    fl1 = True
+    fl11 = False
+    fl12 = True
+    c = 0
+    tempname = ""  # final name
+    tempsurname = ""  # final surname
+    for i in range(1, len(students)):
+        if students[i][0] != str(i + 1000 - 1):
+            students.insert(i, [])  # appends one more list in list
+            students[i].append(str(i + 1000 - 1))  # appends id
+            y = i  # saves i to append data in correct the place
+            break
+    else:
+        x = int(students[len(students) - 1][0])
+        x = x + 1
+        x = str(x)
+        students.append([])
+        students[len(students) - 1].append(x)
+        y = len(students) - 1
+    while fl1:  # it is for valid values
+        tempname = ""
+        fl1 = False
+        name = input("Name: ")
+        while name == "":
+            name = input("Name: ")
+        name = name.strip()
+        name = name.split()
+        for i in range(len(name)):
+            if not name[i].isalpha():
+                fl1 = True
+                name = name.clear()
+                tempname = ""
+                break
+            name[i] = name[i].title()
+            tempname = tempname + name[i]  # if a person has more than 1 name adds it
+            if i != len(name) - 1:
+                tempname = tempname + " "
+    students[y].append(tempname)
+    fl1 = True
+    while fl1:
+        tempsurname = ""
+        fl1 = False
+        surname = input("Surname: ")
+        while surname == "":
+            surname = input("Surname: ")
+        surname = surname.strip()
+        surname = surname.split()
+        for i in range(len(surname)):
+            if not surname[i].isalpha():
+                fl1 = True
+                surname = surname.clear()
+                tempsurname = ""
+                break
+            surname[i] = surname[i].title()
+            tempsurname = tempsurname + surname[i]
+            if i != len(surname) - 1:
+                tempsurname = tempsurname + " "  # if a person has more than 1 surname adds it
+    students[y].append(tempsurname)
+    fathersname = input("Fathersname: ")
+    fathersname = fathersname.strip()
+    while not fathersname.isalpha():
+        fathersname = input("Fathersname: ")
+        fathersname = fathersname.strip()
+    fathersname = fathersname.title()
+    students[y].append(fathersname)
+    # runs if there is at least one person with the same name, surname and fathersname with other person
+    for i in range(1, len(students) - 1):
+        if students[len(students) - 1][1] == students[i][1]:
+            if students[len(students) - 1][2] == students[i][2]:
+                if students[len(students) - 1][3] == students[i][3]:
+                    c += 1  # counter for appearance of how many persons have the same name, surname and fathersname
+                    # with a person
+                    if c == 1:
+                        print(f"There are other/s student/s with these data:"
+                              f" {students[0][1]}{students[i][1]},"
+                              f" {students[0][2]}{students[i][2]}, {students[0][3]}{students[i][3]},"
+                              f" {students[0][4]}{students[i][4]}, {students[0][5]}{students[i][5]}", end="")
+                        if len(students[i]) == 7:  # if person has identity card print it too
+                            print(f", {students[0][6]}{students[i][6]}")
+                            fl12 = False
+                        fl11 = True
+                    if c > 1:  # if at least two persons has the same name, surname and fathersname with one person
+                        # appear them
+                        print(f" & {students[0][1]}{students[i][1]},"
+                              f" {students[0][2]}{students[i][2]}, {students[0][3]}{students[i][3]},"
+                              f" {students[0][4]}{students[i][4]}, {students[0][5]}{students[i][5]}", end="")
+                        if len(students[i]) == 7:
+                            print(f", {students[0][6]}{students[i][6]}")
+                            fl12 = False
+                        fl11 = True
+    if fl11:  # if there are 2 or more persons with name, surname and fathersname appears them
+        if fl12:  # if person has no identity card changes the line manual
+            print("")
+        flag = input("Do you want to continue the registration? If yes press 1 or if no press 0: ")  # if a name,
+        # surname and fathersname are the same program asks user if he wants to continue, if yes the flag turns 1
+        # continues to add person and then takes the value of 2 and if it is 0 the program don't add the person
+        while not flag.isdigit() or (flag != "1" and flag != "0"):
+            flag = input("Do you want to continue the registration? If yes press 1 or if no press 0: ")
+    if flag == "1":
+        age = input("Age: ")
+        age = age.strip()
+        while not age.isdigit():
+            age = input("Age: ")
+        age = age.strip()
+        students[y].append(age)
+        classroom = input("Class: ")
+        classroom = classroom.strip()
+        while not classroom.isdigit() or (int(classroom) < 1 or int(classroom) > 6):
+            classroom = input("Class: ")
+        classroom = classroom.strip()
+        students[y].append(classroom)
+        while True:
+            idchoice = input("Do you want to insert identity card? If yes press 1, otherwise 0: ")
+            # choice, if a person has identity card appends it
+            if idchoice.isdigit():
+                idchoice = int(idchoice)
+                if idchoice == 0 or idchoice == 1:
+                    break
+        if idchoice == 0:
+            print("")
+        while idchoice == 1:
+            cn = 0  # identity card's counter of digits
+            identity = input("ID: ")
+            while identity == "":
+                identity = input("ID: ")
+            identity = identity.strip()
+            # specific parameters for greek identity card
+            if identity[0].isalpha() and (identity[1].isalpha() or identity[1].isdigit() or identity[1] == "."):
+                for j in range(1, len(identity)):
+                    if identity[j].isdigit():
+                        cn += 1
+                    else:
+                        cn = 0
+                if cn == 6 and len(identity) <= 8:  # if there are 6 numbers and length till 8 (specific)
+                    # characters appends it
+                    identity = identity.upper()
+                    students[y].append(identity)
+                    print("")
+                    break
+        flag = "2"
+        print("Registration done successfully!")
+    elif flag == "0":
+        students.pop()
+
+
+def print_pupils_details():
+    for i in range(1, len(students)):
+        iden = students[i][0]
+        print_pupil(iden)
+        print("")
+
+
+def search_pupil_by_surname(surname):
+    global students
+    ids = set()  # to prevent to change id from other student that he has not the same surname
+    cnt2 = 0  # chooses the cases of have no registration, one or two and more
+    for i in range(1, len(students)):
+        if surname == students[i][2]:
+            ident = students[i][0]  # save the id of the student's surname for using it at the menu
+            cnt2 += 1
+    if cnt2 >= 2:
+        for i in range(len(students)):
+            if surname == students[i][2]:
+                for j in range(len(students[i])):
+                    print(students[0][j], end="")
+                    print(students[i][j])
+                    ids.add(students[i][0])
+                print("")
+        while True:
+            upid = input("Which student do you want to update? Insert id: ")
+            if upid.isdigit() and upid in ids:
+                break
+            print("Wrong input. ", end="")
+        for i in range(len(students)):
+            if students[i][0] == upid:
+                print("")
+                menu3(upid, 0)
+                break
+        else:
+            print(f"There is no student with surname: {surname}")
+    elif cnt2 == 0:
+        return print(f"There is no student with surname: {surname}")
+    else:
+        menu3(ident, 0)
+
+
+def delete_pupil_by_id(pupil_id):
+    global fl4
+    for i in range(len(students)):
+        if students[i][0] == pupil_id:
+            students.pop(i)
+            fl4 = True
+            break
+    if not fl4:  # checks if there is a person with the user's input id
+        print("")
+        print(f"There is no registration with id: {pupil_id}")
+
+
+def menu3(a, b):
+    tempname = ""
+    tempsurname = ""
+    fl1 = True
+    for i in range(len(students)):
+        if students[i][b] == a:
+            print("Press 1 to change name")
+            print("Press 2 to change surname")
+            print("Press 3 to change fathersname")
+            print("Press 4 to change age")
+            print("Press 5 to change class")
+            print("Press 6 to change/add identity card")
+            print("")
+            while True:
+                ch = input("Choice: ")
+                if ch.isdigit():
+                    ch = int(ch)
+                    if 1 <= ch <= 6:
+                        break
+            print("")
+            if ch == 1:
+                while fl1:
+                    tempname = ""
+                    fl1 = False
+                    name = input("Name: ")
+                    while name == "":
+                        name = input("Name: ")
+                    name = name.strip()
+                    name = name.split()
+                    for j in range(len(name)):
+                        if not name[j].isalpha():
+                            fl1 = True
+                            name = name.clear()
+                            tempname = ""
+                            break
+                        name[j] = name[j].title()
+                        tempname = tempname + name[j]
+                        if j != len(name) - 1:
+                            tempname = tempname + " "
+                fl1 = True
+                students[i].pop(ch)
+                students[i].insert(ch, tempname)
+            elif ch == 2:
+                while fl1:
+                    tempsurname = ""
+                    fl1 = False
+                    surname = input("Surname: ")
+                    while surname == "":
+                        surname = input("Surname: ")
+                    surname = surname.strip()
+                    surname = surname.split()
+                    for j in range(len(surname)):
+                        if not surname[j].isalpha():
+                            fl1 = True
+                            surname = surname.clear()
+                            tempsurname = ""
+                            break
+                        surname[j] = surname[j].title()
+                        tempsurname = tempsurname + surname[j]
+                        if j != len(surname) - 1:
+                            tempsurname = tempsurname + " "
+                students[i].pop(ch)
+                students[i].insert(ch, tempsurname)
+            elif ch == 3:
+                fathersname = input("Fathersname: ")
+                fathersname = fathersname.strip()
+                while not fathersname.isalpha():
+                    fathersname = input("Fathersname: ")
+                    fathersname = fathersname.strip()
+                fathersname = fathersname.title()
+                students[i].pop(ch)
+                students[i].insert(ch, fathersname)
+            elif ch == 4:
+                age = input("Age: ")
+                age = age.strip()
+                while not age.isdigit():
+                    age = input("Age: ")
+                age = age.strip()
+                students[i].pop(ch)
+                students[i].insert(ch, age)
+            elif ch == 5:
+                classroom = input("Class: ")
+                classroom = classroom.strip()
+                while not classroom.isdigit() or (int(classroom) < 1 or int(classroom) > 6):
+                    classroom = input("Class: ")
+                classroom = classroom.strip()
+                students[i].pop(ch)
+                students[i].insert(ch, classroom)
+            else:
+                while True:
+                    cn = 0
+                    identity = input("ID: ")
+                    while identity == "":
+                        identity = input("ID: ")
+                    identity = identity.strip()
+                    if identity[0].isalpha() and (
+                            identity[1].isalpha() or identity[1].isdigit() or identity[1] == "."):
+                        for j in range(1, len(identity)):
+                            if identity[j].isdigit():
+                                cn += 1
+                            else:
+                                cn = 0
+                        if cn == 6 and len(identity) <= 8:
+                            identity = identity.upper()
+                            if len(students[i]) == 7:
+                                students[i].pop(ch)
+                            students[i].insert(ch, identity)
+                            break
+
+
+def next_id():
+    for i in range(1, len(students)):
+        if students[i][0] != str(i + 1000 - 1):
+            return i + 1000 - 1
+    else:
+        return len(students) - 1 + 1000
+
+
+def main():
+    global students
+
+    students = [
+        ["ID: ", "Name: ", "Surname: ", "Fathersname: ", "Age: ", "Class: ", "ID: "],
+        ["1000", "Christos", "Tsalparas", "Panagiotis", "12", "6", "AK471926"],
+        ["1001", "Giorgos", "Karamitros", "Ioannis", "10", "4"],
+        ["1002", "Pantenlis", "Papadopoulos", "Periklis", "9", "3"],
+    ]
+
+    cnt = 0
+    cn = 0
+    while True:
+        tempname = ""  # final name
+        tempsurname = ""  # final surname
+        flag = 1
+        fl1 = True
+        fl3 = False
+        fl4 = False
+        # menu
+        print("")
+        print("Press 1 for a new registration")
+        print("Press 2 for print")
+        print("Press 3 for update")
+        print("Press 4 for delete")
+        print("Press 5 for exit")
+        print("")
+
+        while True:
+            choice = input("Choice: ")
+            if choice.isdigit():
+                choice = int(choice)
+                if 1 <= choice <= 5:
+                    break
+        print("")
+
+        if choice == 1:  # appends a person
+            create_pupil()
+        elif choice == 2:  # prints a person
+            print("Press 1 to print a specific student")
+            print("Press 2 to print all students")
+            print("Press 3 to print all students' name")
+            print("")
+            while True:
+                ch22 = (input("Choice: ")).strip()
+                if ch22.isdigit():
+                    ch22 = int(ch22)
+                    if 1 <= ch22 <= 3:
+                        break
+                    else:
+                        print("Wrong input!", end=" ")
+                else:
+                    print("Wrong input!", end=" ")
+            print("")
+            if ch22 == 1:
+                while True:
+                    iden = input("Insert ID: ")
+                    iden = iden.strip()
+                    if iden.isdigit():
+                        iden = int(iden)
+                        if iden >= 1000:
+                            iden = str(iden)
+                            break
+                print("")
+                print_pupil(iden)
+            elif ch22 == 2:
+                print_pupils_details()
+            else:
+                for i in range(1, len(students) - 1):
+                    print(students[i][1], end=" ")
+                    print(f"{students[i][3][0]}.", end=" ")
+                    print(students[i][2], end=", ")
+                print(students[len(students) - 1][1], end=" ")
+                print(f"{students[len(students) - 1][3][0]}.", end=" ")
+                print(students[len(students) - 1][2])
+                print("")
+        elif choice == 3:  # updates information of a person
+            fl3 = False
+            while True:
+                ans = input("Do you want to update a student with id or surname? Insert id or surname: ")
+                if ans == "id" or ans == "surname":
+                    break
+            if ans == "id":
+                pos = 0
+                while True:
+                    iden = input("Insert ID: ")
+                    iden = iden.strip()
+                    if iden.isdigit():
+                        iden = int(iden)
+                        if iden >= 1000:
+                            iden = str(iden)
+                            break
+                print("")
+                for i in range(len(students)):
+                    if students[i][0] == iden:
+                        fl3 = True
+                if not fl3:  # checks if there is a person with the user's input id
+                    print(f"There is no registration with id: {iden}")
+                menu3(iden, pos)
+            else:
+                pos = 2
+                while True:
+                    sur = input("Insert Surname: ")
+                    sur = sur.strip()
+                    sur = sur.capitalize()
+                    if sur.isalpha():
+                        break
+                print("")
+                search_pupil_by_surname(sur)
+        elif choice == 4:  # deletes person
+            fl4 = False
+            while True:
+                ans = input("Do you want to delete a student with id or surname? Insert id or surname: ")
+                if ans == "id" or ans == "surname":
+                    break
+            print("")
+            if ans == "id":
+                pos = 0
+                while True:
+                    iden = input("Insert ID: ")
+                    iden = iden.strip()
+                    if iden.isdigit():
+                        iden = int(iden)
+                        if iden >= 1000:
+                            iden = str(iden)
+                            break
+                delete_pupil_by_id(iden)
+            else:
+                pos = 2
+                while True:
+                    sur = input("Insert Surname: ")
+                    sur = sur.strip()
+                    sur = sur.capitalize()
+                    if sur.isalpha():
+                        break
+                print("")
+                ids = set()  # to prevent to change id from other student that he has not the same surname
+                cnt2 = 0  # chooses the cases of have no registration, one or two and more
+                for i in range(1, len(students)):
+                    if sur == students[i][2]:
+                        ident = students[i][0]  # save the id of the student's surname for using it at the menu
+                        cnt2 += 1
+                if cnt2 >= 2:
+                    for i in range(len(students)):
+                        if sur == students[i][2]:
+                            for j in range(len(students[i])):
+                                print(students[0][j], end="")
+                                print(students[i][j])
+                                ids.add(students[i][0])
+                            print("")
+                    while True:
+                        upid = input("Which student do you want to update? Insert id: ")
+                        if upid.isdigit() and upid in ids:
+                            break
+                        print("Wrong input. ", end="")
+
+                    for i in range(len(students)):
+                        if students[i][0] == upid:
+                            print("")
+                            students.pop(i)
+                            break
+                    else:
+                        print(f"There is no student with surname: {sur}")
+                elif cnt2 == 0:
+                    print(f"There is no student with surname: {sur}")
+                else:
+                    for i in range(len(students)):
+                        if students[i][2] == sur:
+                            students.pop(i)
+                            fl4 = True
+                            break
+                    if not fl4:  # checks if there is a person with the user's input id
+                        print("")
+                        print(f"There is no registration with surname: {sur}")
+        else:  # exits the program
+            break
+        if flag == 0:
+            students[len(students) - 1].clear()
+            students.pop()
+
+
+main()
